@@ -202,6 +202,7 @@ public class MainActivity extends AppCompatActivity {
                     InputStream is = conn.getInputStream();
                     byte[] buf = new byte[1024 * 1024];
                     RandomAccessFile randomFile = new RandomAccessFile(file, "rw");
+                    randomFile.seek(begin);
 
                     int len;
                     HashMap<String, Integer> map = mDownloadList.get(id);
