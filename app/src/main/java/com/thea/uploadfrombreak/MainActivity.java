@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case MSG_UPDATE_PROGRESS:
                     mProgressBar.setProgress(msg.arg1);
+                    if (msg.arg1 == mFileLength)
+                        Toast.makeText(MainActivity.this, "下载完成", Toast.LENGTH_SHORT).show();
                     break;
                 case MSG_FILE_NOT_EXIST:
                     Toast.makeText(MainActivity.this, "文件不存在！", Toast.LENGTH_SHORT).show();
@@ -82,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
                     "Windows NT 5.1; Trident/4.0; .NET CLR 2.0.50727");
 
             mFileLength = conn.getContentLength();
+            Log.i(TAG, "File length: " + mFileLength);
             mHandler.sendEmptyMessage(MSG_INIT_PROGRESS);
             if (mFileLength < 0)
                 mHandler.sendEmptyMessage(MSG_FILE_NOT_EXIST);
@@ -93,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                 int blockSize = mFileLength / 3;
                 for (int i = 0; i < 3; i++) {
                     int begin = i * blockSize;
-                    int end = i == 2 ? mFileLength : (i + 1) * blockSize;
+                    int end = i == 2 ? mFileLength : ((i + 1) * blockSize - 1);
 
                     HashMap<String, Integer> map = new HashMap<>();
                     map.put(KEY_BEGIN, begin);
@@ -129,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
                     int begin = map.get(KEY_BEGIN);
                     int end = map.get(KEY_END);
                     int finished = map.get(KEY_FINISHED);
-                    new Thread(new DownloadRunnable(i, begin + finished, end, mFile, mUrl));
+                    new Thread(new DownloadRunnable(i, begin + finished, end, mFile, mUrl)).start();
                 }
             }
         }
