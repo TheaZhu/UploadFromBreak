@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">断点续传</string>
+    <string name="hint_url">下载地址</string>
+
+    <string name="action_settings">设置</string>
+    <string name="action_download">下载</string>
+    <string name="action_pause">暂停</string>
+</resources>
